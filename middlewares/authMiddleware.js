@@ -8,8 +8,11 @@ const authMiddleware = asyncHandler (async (req, res, next) =>{
         token = req.headers.authorization.split(' ')[1];
         try {
             if (token){
-                const decored = jwt.verify(token, process.env.JWT_SECRET);
-                console.log(decored);
+                const decoded = jwt.verify(token, process.env.JWT_SECRET);
+                const user = await User.findById(decoded?.id);
+                req.user = user;
+                next(),
+                console.log(decoded);
             }
         } catch (error) {
             throw new Error ('Not Authorized token expired. Please Login')
@@ -19,5 +22,13 @@ const authMiddleware = asyncHandler (async (req, res, next) =>{
     }
 });
 
+const isAdmin = asyncHandler (async(req, res, next) =>{
+    const { email } = req.user;
+    const adminUser = await User.findOne({ email });
+    if (adminUser.role !== "admin"){
+        throw new Error ('You are not an Admin')
+    }else{next()}
+})
 
-module.exports = { authMiddleware };
+
+module.exports = { authMiddleware, isAdmin };
