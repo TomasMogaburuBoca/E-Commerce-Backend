@@ -14,6 +14,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
 const morgan = require ('morgan');
+const handlebars = require ('express-handlebars');
 
 PORT = process.env.PORT || 4000;
 dbConnect();
@@ -24,6 +25,19 @@ app.use(morgan('dev'));
 //Setting Postman
 app.use (bodyParser.json());
 app.use (bodyParser.urlencoded ({extended: false}));
+
+// Setting Handlebars
+app.set('view engine', 'hbs');
+app.set('views', './views');
+
+app.engine('hbs', handlebars({
+    extname: ".hbs",
+    defaultLayout: "index.js",
+    layoutDir:__dirname + './views/partials',
+    partialsDir: __dirname + './views/partials'
+}));
+
+app.use(express.static('public'));
 
 //Setting Cookie Parser
 app.use(cookieParser());
