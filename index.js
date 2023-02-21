@@ -1,7 +1,7 @@
 const express = require ('express');
 const dbConnect = require('./config/dbConnect');
 const app = express();
-const dotenv = require ('dotenv').config();
+require ('dotenv').config();
 const authRouter = require ('./routes/authRoute');
 const productRouter = require ('./routes/productRoute');
 const blogRouter = require ('./routes/blogRoute');
@@ -30,7 +30,7 @@ app.use (bodyParser.urlencoded ({extended: false}));
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
-app.engine('hbs', handlebars({
+app.engine('hbs', handlebars.engine({
     extname: ".hbs",
     defaultLayout: "index.js",
     layoutDir:__dirname + './views/partials',
