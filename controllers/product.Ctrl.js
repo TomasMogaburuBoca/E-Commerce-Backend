@@ -69,7 +69,9 @@ const getAllProducts = asyncHandler (async (req, res) =>{
         }
 
         const product = await query;
-        res.json ( product )
+        //res.json ( product )
+        const productParse = JSON.parse(product);
+        res.render('products', {productParse});
     } catch (error) {
         throw new Error (error);
     }

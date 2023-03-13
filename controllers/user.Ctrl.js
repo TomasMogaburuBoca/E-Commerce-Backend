@@ -16,7 +16,9 @@ const createUser = asyncHandler (async (req, res) =>{
     const findUser = await User.findOne({email: email});
     if (!findUser){
         const newUser = await User.create(req.body);
-        res.json(newUser);
+        //res.json(newUser);
+        const newUserParser = JSON.parse(newUser)
+        res.render(`'main', {newUserParser}`)///////////////////////////////////////////
     }else {
         throw new Error ('User already exist')
     }
@@ -39,12 +41,17 @@ const loginUserCtrl = asyncHandler (async(req, res) =>{
             httpOnly: true,
             maxAge: 72 * 60 *60 * 1000
         })
-        res.json ({
-            _id: findUser?._id,
+        // res.json ({
+        //     _id: findUser?._id,
+        //     name: findUser?.name,
+        //     surname: findUser?.surname,
+        //     email: findUser?.email,
+        //     token: generateToken(findUser?._id)
+        // });
+        res.render ('main',{
             name: findUser?.name,
             surname: findUser?.surname,
             email: findUser?.email,
-            token: generateToken(findUser?._id)
         });
     }else{
         throw new Error ('Invalid credential')

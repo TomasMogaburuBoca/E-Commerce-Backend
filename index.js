@@ -15,6 +15,7 @@ const cookieParser = require('cookie-parser');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
 const morgan = require ('morgan');
 const handlebars = require ('express-handlebars');
+const passport = require ('passport');
 
 PORT = process.env.PORT || 4000;
 dbConnect();
@@ -30,12 +31,13 @@ app.use (bodyParser.urlencoded ({extended: false}));
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
-app.engine('hbs', handlebars.engine({
+const appEngine = app.engine('hbs', handlebars.engine({
     extname: ".hbs",
-    defaultLayout: "index.js",
+    defaultLayout: "index.hbs",
     layoutDir:__dirname + './views/partials',
     partialsDir: __dirname + './views/partials'
 }));
+console.log(appEngine);
 
 app.use(express.static('public'));
 
@@ -44,6 +46,7 @@ app.use(cookieParser());
 
 
 //Routes
+
 app.use('/api/user', authRouter);
 app.use('/api/product', productRouter);
 app.use('/api/blog', blogRouter);
